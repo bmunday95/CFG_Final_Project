@@ -1,7 +1,7 @@
 import requests
 from pprint import pprint as pp
 from creditials_API import tmdb_api_key_v3
-from boolean_funcs import is_korean_show
+from bool_functions import is_korean_show
 
 #search by show name - this is the primary function
 def show_search():
