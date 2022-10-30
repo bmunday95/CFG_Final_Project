@@ -2,38 +2,28 @@
 import mysql.connector
 from creditials_API import USER, PASSWORD, HOST, DB_NAME
 
-#
-# def decorated_connection(func):
-#     def connect_to_db(username, connect=None):
-#         connection = mysql.connector.connect(
-#             host=HOST,
-#             user=USER,
-#             password=PASSWORD,
-#             auth_plugin='mysql_native_password',
-#             database=username
-#         )
-#         func(username, connection)
-#         return connect_to_db
+def connect_to_db(func):
+    def inner_function(query):
+        connection = mysql.connector.connect(
+            host=HOST,
+            user=USER,
+            password=PASSWORD,
+            auth_plugin='mysql_native_password',
+            database=DB_NAME
+        )
+        cur = connection.cursor() #assigns cursor to a variable
+        result = func(query, cur) #the function being wrapped MUST take 2 variables
+        connection.commit() #will commit changes, but doesnt do anything to view
+        cur.close() #close cursor
+        connection.close() #close connection
+        return result
+    return inner_function
 
-def connect_to_db():
-    connection = mysql.connector.connect(
-        host=HOST,
-        user=USER,
-        password=PASSWORD,
-        auth_plugin='mysql_native_password',
-        database=DB_NAME
-    )
-    return connection
-
-def execute_query(query):
-    db_connection = connect_to_db()
-    cur = db_connection.cursor()
+@connect_to_db #the func being wrapped up needs to take 2 arguments
+def execute_query(query, cur=None): #set cursor as None so it doesn't mess with the wrapping?
     cur.execute(query)
-    db_connection.commit()
-    result = cur.fetchall()
-    cur.close()
-    db_connection.close()
-    return result
+    return cur.fetchall() #this didnt work when I assigned it to a variable
+
 
 def display_completed_list():
     query = "SELECT * FROM completed_shows" #update to cleaner search
@@ -41,6 +31,7 @@ def display_completed_list():
     for entry in result: #this will show the whole list, but i could probs make it show individ entries? further search functionality
         print(entry)
     print('Connection closed')
+    return
 
 
 def display_to_watch_list():

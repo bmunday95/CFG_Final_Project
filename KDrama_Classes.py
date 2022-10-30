@@ -63,7 +63,7 @@ class KDramaDB(KoreanShows):
     def is_search_correct_complete(self, result):
         if result == 'Y':#call insert func
             self.insert_show_complete()
-            print('\nadded\n')  # append the entry to DB or file
+            print('\nShow added\n')  # append the entry to DB or file
         elif result == 'N':
             print('\nSorry\n')  # pull up second result if available? This needs some functionality
         else:
@@ -74,7 +74,7 @@ class KDramaDB(KoreanShows):
     def is_search_correct_to_watch(self, result):
         if result == 'Y':#call insert func
             self.insert_show_to_watch()
-            print('\nadded\n')  # append the entry to DB or file
+            print('\nShow added\n')  # append the entry to DB or file
         elif result == 'N':
             print('\nSorry\n')  # pull up second result if available? This needs some functionality
         else:
@@ -110,7 +110,7 @@ class KDramaDB(KoreanShows):
     @classmethod
     def insert_show_complete(self):
         values_to_add = self.db_data(self)
-        query = "INSERT INTO completed_list (show_title, show_release, show_overview) " \
+        query = "INSERT INTO completed_shows (show_title, show_release, show_overview) " \
                 f"VALUES ('{values_to_add.show_name}', '{values_to_add.show_release}', '{values_to_add.show_overview}');"
         result = execute_query(query)
         return result
