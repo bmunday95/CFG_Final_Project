@@ -57,26 +57,3 @@ def add_to_watchlist():
 All data stored in the same DB, but each user could have their own tables - if I have the time it could be 
 a name input and the tables could be Beth_completed_list for example
 """
-
-# def insert_record_in_table(record):
-#     try:
-#         db_name = 'tests'
-#         # db engine provides connection to db
-#         db_connection = connect_to_db(db_name)
-#         # cursor allows us to execute queries
-#         cur = db_connection.cursor()
-#         print('Database connection successful')
-#
-#         query = f"INSERT INTO  completed_shows (show_title, show_release, show_overview) " \
-#                 "VALUES ({},{},{})"
-#         cur.execute(query)
-#         db_connection.commit() #you have to explicitly commit it to make the change work
-#         cur.close()
-#
-#     except Exception:
-#         raise DbConnectionError
-#
-#     finally:
-#         if db_connection:
-#             db_connection.close()
-#             print('Connection closed')
