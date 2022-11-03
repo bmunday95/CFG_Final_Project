@@ -14,16 +14,24 @@ while True:
     if menu_option == 1:         # this will be a DB print
         print("Completed list: \n")
         KDramaDB.get_completed()
+
     elif menu_option == 2:       # this will be a DB print
         print("To Watch list: \n")
         KDramaDB.get_to_watch()
+
     elif menu_option == 3:  # completed
         show_choice = input('\nWhat show are you looking for? ').title()
-        menu_option3(show_choice)
+        while not KoreanShows.korean_show_search(show_choice):
+            print("No results")
+            show_choice = input('\nWhat show are you looking for? ').title()
+        is_correct = input("\nIs this the correct show? Y/N ").upper()
+        KDramaDB.is_search_correct(menu_option, is_correct)
 
-    elif menu_option == 4: #to watch
+    elif menu_option == 4: #to watch]]
         show_choice = input('\nWhat show are you looking for? ').title()
-        KoreanShows.korean_show_search(show_choice)
+        while not KoreanShows.korean_show_search(show_choice):
+            print("No results")
+            show_choice = input('\nWhat show are you looking for? ').title()
         is_correct = input("\nIs this the correct show? Y/N ").upper()
         KDramaDB.is_search_correct(menu_option, is_correct)
         # is this show correct func
@@ -36,9 +44,3 @@ while True:
         print(f"Input not recognised, try again.") #re-runs while True
 
 
-def menu_option3(show_choice):
-    while not KoreanShows.korean_show_search(show_choice):
-            print("No results")
-            show_choice = input('\nWhat show are you looking for? ').title()
-    is_correct = input("\nIs this the correct show? Y/N ").upper()
-    KDramaDB.is_search_correct(menu_option, is_correct)

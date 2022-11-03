@@ -36,7 +36,7 @@ class KoreanShows:
         response_show = requests.get(
             f"https://api.themoviedb.org/3/search/tv?api_key={tmdb_api_key_v3}&query={show_choice}")
         show_info = response_show.json()
-        print(show_info)
+        # print(show_info)
         tv_shows = show_info['results']
         if tv_shows:
             korean_tv_shows = list(filter(self.is_korean_show, tv_shows))
