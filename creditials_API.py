@@ -6,7 +6,7 @@ tmdb_api_key_v4 = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0NTQ4Y2JlNGQwNTI3NzYwZTVmMmFl
 
 HOST = "localhost"
 USER = "root"
-PASSWORD = " "
+PASSWORD = "MangoSmoothie20"
 DB_NAME = 'k_drama'
 
-show_db_format = namedtuple('show_db_format', ['show_name', 'show_release', 'show_overview'])
+show_db_format = namedtuple('show_db_format', ["show_name", "show_release", "show_overview"])

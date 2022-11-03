@@ -25,34 +25,6 @@ def execute_query(query, cur=None): #set cursor as None so it doesn't mess with 
     return cur.fetchall() #this didnt work when I assigned it to a variable
 
 
-def display_completed_list():
-    query = "SELECT * FROM completed_shows" #update to cleaner search
-    result = execute_query(query)
-    for entry in result: #this will show the whole list, but i could probs make it show individ entries? further search functionality
-        print(entry)
-    print('Connection closed')
-    return
-
-
-def display_to_watch_list():
-    query = "SELECT * FROM watch_list"  # update to cleaner search
-    result = execute_query(query)
-    for entry in result:  # this will show the whole list, but i could probs make it show individ entries? further search functionality
-        print(entry)
-    print('Connection closed')
-
-def add_completed_show():
-    query = ""
-    result = execute_query(query)
-    pass #use the SQL statements to add entries
-    #when adding, include if statement - if show in watchlist then remove from watch list
-
-def add_to_watchlist():
-    query = ""
-    result = execute_query(query)
-    pass
-
-
 """
 All data stored in the same DB, but each user could have their own tables - if I have the time it could be 
 a name input and the tables could be Beth_completed_list for example

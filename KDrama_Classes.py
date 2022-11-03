@@ -1,7 +1,10 @@
+import string
+import stringprep
+
 import requests
 from pprint import pprint as pp
 from creditials_API import tmdb_api_key_v3, show_db_format
-from db_test_run import connect_to_db, execute_query
+from database_connection import connect_to_db, execute_query
 
 """
 Show class - each method within it must do one thing:
@@ -33,10 +36,14 @@ class KoreanShows:
         response_show = requests.get(
             f"https://api.themoviedb.org/3/search/tv?api_key={tmdb_api_key_v3}&query={show_choice}")
         show_info = response_show.json()
+        print(show_info)
         tv_shows = show_info['results']
-        korean_tv_shows = list(filter(self.is_korean_show, tv_shows))
-        initial_result = self.get_first_show(korean_tv_shows)
-        return initial_result
+        if tv_shows:
+            korean_tv_shows = list(filter(self.is_korean_show, tv_shows))
+            initial_result = self.get_first_show(korean_tv_shows)
+            return initial_result
+        else:
+            return False
 
     @classmethod
     def get_first_show(self, k_tv):
@@ -46,13 +53,15 @@ class KoreanShows:
         self.show_overview = first_result.pop('overview')
         show_data_list = [f"Show title: {self.show_name}", f"Show release date: {self.show_release}",
                           f"Show overview: {self.show_overview}"]
-        pp(show_data_list)
+        print("\n".join(show_data_list))  # this is just personal preference,the output is easier to read than pp
         return show_data_list
 
 
+
+
 """
-Decided to put the DB work in a child class, not sure if this is best practice? I wanted to keep the DB work separate from
-the search, but it still needs access to the info that was pulled from the API
+Decided to put the DB work in a child class, not sure if this is best practice? I wanted to keep the DB work separate 
+from the search, but it still needs access to the info that was pulled from the API
 """
 class KDramaDB(KoreanShows):
 
@@ -60,26 +69,27 @@ class KDramaDB(KoreanShows):
         return show_db_format(self.show_name, self.show_release, self.show_overview)
 
     @classmethod
-    def is_search_correct_complete(self, result):
-        if result == 'Y':#call insert func
-            self.insert_show_complete()
-            print('\nShow added\n')  # append the entry to DB or file
-        elif result == 'N':
-            print('\nSorry\n')  # pull up second result if available? This needs some functionality
-        else:
-            print("\nInput not accepted\n")
-        return result
+    def is_search_correct(self, menu_option, result):
+        if menu_option == 3:
+            if result == 'Y':#call insert func
+                self.insert_show_complete()
+                print('\nShow added to Completed List\n')
+            elif result == 'N':
+                print('\nSorry\n')  # pull up second result if available? This needs some functionality
+            else:
+                print("\nInput not accepted\n")
 
-    @classmethod
-    def is_search_correct_to_watch(self, result):
-        if result == 'Y':#call insert func
-            self.insert_show_to_watch()
-            print('\nShow added\n')  # append the entry to DB or file
-        elif result == 'N':
-            print('\nSorry\n')  # pull up second result if available? This needs some functionality
-        else:
-            print("\nInput not accepted\n")
-        return result
+        elif menu_option == 4:
+            if result == 'Y':  # call insert func
+                self.insert_show_to_watch()
+                print('\nShow added to Watch List\n')  # append the entry to DB or file
+            elif result == 'N':
+                print('\nSorry\n')
+            # pull up second result if available? This needs some functionality
+            else:
+                print("\nInput not accepted\n")
+            return result
+
 
     @classmethod
     def get_completed(self):
@@ -102,8 +112,9 @@ class KDramaDB(KoreanShows):
     @classmethod
     def insert_show_to_watch(self):
         values_to_add = self.db_data(self)
-        query = "INSERT INTO watch_list (show_title, show_release, show_overview) " \
-                f"VALUES ('{values_to_add.show_name}', '{values_to_add.show_release}', '{values_to_add.show_overview}');"
+        query = 'INSERT INTO watch_list (show_title, show_release, show_overview) ' \
+                f'VALUES ("{values_to_add.show_name}", "{values_to_add.show_release}", ' \
+                f'"{values_to_add.show_overview}");'
         result = execute_query(query)
         return result
 
@@ -111,7 +122,9 @@ class KDramaDB(KoreanShows):
     def insert_show_complete(self):
         values_to_add = self.db_data(self)
         query = "INSERT INTO completed_shows (show_title, show_release, show_overview) " \
-                f"VALUES ('{values_to_add.show_name}', '{values_to_add.show_release}', '{values_to_add.show_overview}');"
+                f"VALUES ('{values_to_add.show_name}', '{values_to_add.show_release}', " \
+                f"'{values_to_add.show_overview}');"
         result = execute_query(query)
         return result
+
 

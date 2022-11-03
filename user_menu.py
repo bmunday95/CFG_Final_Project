@@ -19,20 +19,26 @@ while True:
         KDramaDB.get_to_watch()
     elif menu_option == 3:  # completed
         show_choice = input('\nWhat show are you looking for? ').title()
-        KoreanShows.korean_show_search(show_choice)
-        is_correct = input("\nIs this the correct show? Y/N ").upper()
-        KDramaDB.is_search_correct_complete(is_correct)
-        # is this show correct func
-        # if yes, append, if no pull next result (if i can lol)
+        menu_option3(show_choice)
+
     elif menu_option == 4: #to watch
         show_choice = input('\nWhat show are you looking for? ').title()
         KoreanShows.korean_show_search(show_choice)
         is_correct = input("\nIs this the correct show? Y/N ").upper()
-        KDramaDB.is_search_correct_to_watch(is_correct)    # is this show correct func
-        # if yes, append, if no pull next result (if i can lol)
+        KDramaDB.is_search_correct(menu_option, is_correct)
+        # is this show correct func
+        # if yes, append, if no pull next result (if i can - additional functionality)
     elif menu_option == 5:
         print("Goodbye\n")
         break
 
     else:
         print(f"Input not recognised, try again.") #re-runs while True
+
+
+def menu_option3(show_choice):
+    while not KoreanShows.korean_show_search(show_choice):
+            print("No results")
+            show_choice = input('\nWhat show are you looking for? ').title()
+    is_correct = input("\nIs this the correct show? Y/N ").upper()
+    KDramaDB.is_search_correct(menu_option, is_correct)
