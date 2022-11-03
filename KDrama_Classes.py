@@ -121,9 +121,9 @@ class KDramaDB(KoreanShows):
     @classmethod
     def insert_show_complete(self):
         values_to_add = self.db_data(self)
-        query = "INSERT INTO completed_shows (show_title, show_release, show_overview) " \
-                f"VALUES ('{values_to_add.show_name}', '{values_to_add.show_release}', " \
-                f"'{values_to_add.show_overview}');"
+        query = 'INSERT INTO completed_shows (show_title, show_release, show_overview) ' \
+                f'VALUES ("{values_to_add.show_name}", "{values_to_add.show_release}", ' \
+                f'"{values_to_add.show_overview}");'
         result = execute_query(query)
         return result
 
