@@ -1,4 +1,5 @@
 from KDrama_Classes import KoreanShows, KDramaDB
+from user_menu_utils import menu_option_3, menu_option_1, menu_option_2, menu_option_4
 
 #this will be the main page that gets run
 
@@ -12,30 +13,19 @@ while True:
     menu_option = int(input(f"{initial_greeting}Please choose option 1, 2, 3, 4, or 5: "))
 
     if menu_option == 1:         # this will be a DB print
-        print("Completed list: \n")
-        KDramaDB.get_completed()
+        menu_option_1()
 
     elif menu_option == 2:       # this will be a DB print
-        print("To Watch list: \n")
-        KDramaDB.get_to_watch()
+        menu_option_2()
 
     elif menu_option == 3:  # completed
         show_choice = input('\nWhat show are you looking for? ').title()
-        while not KoreanShows.korean_show_search(show_choice):
-            print("No results")
-            show_choice = input('\nWhat show are you looking for? ').title()
-        is_correct = input("\nIs this the correct show? Y/N ").upper()
-        KDramaDB.is_search_correct(menu_option, is_correct)
+        menu_option_3(show_choice, menu_option) #update to remove input from function
 
     elif menu_option == 4: #to watch]]
         show_choice = input('\nWhat show are you looking for? ').title()
-        while not KoreanShows.korean_show_search(show_choice):
-            print("No results")
-            show_choice = input('\nWhat show are you looking for? ').title()
-        is_correct = input("\nIs this the correct show? Y/N ").upper()
-        KDramaDB.is_search_correct(menu_option, is_correct)
-        # is this show correct func
-        # if yes, append, if no pull next result (if i can - additional functionality)
+        menu_option_4(show_choice, menu_option) #update to remove input from function
+
     elif menu_option == 5:
         print("Goodbye\n")
         break
