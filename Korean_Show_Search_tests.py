@@ -5,6 +5,7 @@ from KDrama_Classes import KoreanShows
 class KoreanShowSearch(unittest.TestCase):
     @patch('KDrama_Classes.requests')
     def test_find_album_by_id_success(self, mock_requests):
+        #Arrange
         # mock the response
         mock_response = MagicMock()
         mock_response.status_code = 200
@@ -48,8 +49,10 @@ class KoreanShowSearch(unittest.TestCase):
 
         # specify the return value of the get() method
         mock_requests.get.return_value = mock_response
-
+        #Act
         lst = KoreanShows.korean_show_search('popular')
+
+        #Assert
         self.assertEqual(len(lst), 3)
 
         self.assertIn('Show title', lst[0], "Show Title didn't find.")
@@ -87,5 +90,25 @@ class KoreanShowSearch(unittest.TestCase):
         # specify the return value of the get() method
         mock_requests.get.return_value = mock_response
 
+        with self.assertRaises((RuntimeError, IndexError)):KoreanShows.korean_show_search('popular')
+
+    @patch('KDrama_Classes.requests')
+    def test_find_album_by_id_NoResult_ReturnFalse(self, mock_requests):
+        # Arrange
+        # mock the response
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = {
+            "page": 1,
+            "results": [],
+            "total_pages": 2,
+            "total_results": 2
+        }
+
+        # specify the return value of the get() method
+        mock_requests.get.return_value = mock_response
+        # Act
         lst = KoreanShows.korean_show_search('popular')
-        self.assertIsNone(lst)
+
+        # Assert
+        self.assertFalse(lst)

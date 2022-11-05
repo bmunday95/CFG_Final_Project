@@ -37,7 +37,7 @@ class KDramaIntegrationTests(unittest.TestCase):
                     "origin_country": ["KR"],
                     "original_language": "en",
                     "original_name": "Popular Mechanics for Kids",
-                    "overview": "Popula",
+                    "overview": "Popular",
                     "popularity": 2.962,
                     "poster_path": '',
                     "vote_average": 8.8,
@@ -52,14 +52,26 @@ class KDramaIntegrationTests(unittest.TestCase):
         mock_requests.get.return_value = mock_response
 
         KDramaDB.korean_show_search('popular')
+        query = "DELETE FROM completed_shows"
+        execute_query(query)
         #Act
 
         KDramaDB.insert_show_complete()
+        expectedList = []
+        expectedList.append('Popular Mechanics for Kids')
+        expectedList.append('1997-09-07')
+        expectedList.append('Popular')
 
         #Assert
         query = "SELECT * FROM completed_shows"
         result = execute_query(query)
+
         self.assertIsNotNone(result)
+        column =0
+        for data in result:
+            for val in data:
+                self.assertEqual(val,expectedList[column])
+                column = column + 1
 
     @patch('KDrama_Classes.requests')
     def test_get_show_to_watch(self, mock_requests):
@@ -108,6 +120,13 @@ class KDramaIntegrationTests(unittest.TestCase):
         mock_requests.get.return_value = mock_response
 
         KDramaDB.korean_show_search('popular')
+        query = "DELETE FROM watch_list"
+        execute_query(query)
+
+        expectedList = []
+        expectedList.append('Popular Mechanics for Kids')
+        expectedList.append('1997-09-07')
+        expectedList.append('Popular ABC.')
         #Act
 
         KDramaDB.insert_show_to_watch()
@@ -116,4 +135,10 @@ class KDramaIntegrationTests(unittest.TestCase):
         query = "SELECT * FROM watch_list"
         result = execute_query(query)
         self.assertIsNotNone(result)
+
+        column = 0
+        for data in result:
+            for val in data:
+                self.assertEqual(val, expectedList[column])
+                column = column + 1
 
