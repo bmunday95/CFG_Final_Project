@@ -47,8 +47,6 @@ class KoreanShows:
 
     @classmethod
     def get_first_show(self, k_tv):
-        if k_tv is None or len(k_tv) == 0 :
-            return
         first_result = k_tv.pop(0)  # this variable is now a dict
         self.show_name = first_result.pop('name')
         self.show_release = first_result.pop('first_air_date')
